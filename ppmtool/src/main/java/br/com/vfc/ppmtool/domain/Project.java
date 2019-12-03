@@ -15,7 +15,7 @@ public class Project extends BaseEntity {
     private String projectName;
 
     @NotBlank(message = "Project identifier is requided.")
-    @Size(min = 4, max = 5, message = "Project identifier must have $0 to $1 characters.")
+    @Size(min = 4, max = 5, message = "Project identifier must have 4 to 5 characters.")
     @Column(updatable = false, unique = true)
     private String projectIdentifier;
 
