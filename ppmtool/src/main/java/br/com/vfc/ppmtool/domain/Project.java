@@ -1,26 +1,32 @@
 package br.com.vfc.ppmtool.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Entity
 public class Project extends BaseEntity {
 
-    @NotBlank
+    @NotBlank(message = "Project name is required.")
     private String projectName;
 
-    @NotBlank
-    @Length(min = 5, max = 5)
+    @NotBlank(message = "Project identifier is requided.")
+    @Size(min = 4, max = 5, message = "Project identifier must have $0 to $1 characters.")
+    @Column(updatable = false, unique = true)
     private String projectIdentifier;
 
+    @NotBlank(message = "Project description is required.")
     private String description;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name = "start_date")
     private Date startDate;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name = "end_date")
     private Date endDate;
 
