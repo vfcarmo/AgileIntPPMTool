@@ -1,10 +1,8 @@
 package br.com.vfc.ppmtool.services;
 
 import br.com.vfc.ppmtool.domain.BaseEntity;
-import br.com.vfc.ppmtool.domain.Project;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface CrudService<T extends BaseEntity, ID> {
 
