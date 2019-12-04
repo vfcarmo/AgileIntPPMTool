@@ -53,4 +53,11 @@ public class ProjectController extends BaseController {
         return ResponseEntity.created(uri).body(savedProject);
     }
 
+    @DeleteMapping("/{projectIdentifier}")
+    public ResponseEntity<?> deleteProjectByProjectIdentifier(@PathVariable String projectIdentifier) {
+
+        projectService.deleteByProjectIdentifier(projectIdentifier);
+
+        return ResponseEntity.noContent().build();
+    }
 }

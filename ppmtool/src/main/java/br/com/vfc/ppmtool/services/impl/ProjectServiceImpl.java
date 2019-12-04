@@ -59,4 +59,12 @@ public class ProjectServiceImpl implements ProjectService {
     public void deleteById(Long id) {
         this.projectRepository.deleteById(id);
     }
+
+    @Override
+    public void deleteByProjectIdentifier(String projectIdentifier) {
+
+        Project savedProject = findByProjectIdentifier(projectIdentifier);
+
+        this.projectRepository.delete(savedProject);
+    }
 }
