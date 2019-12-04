@@ -1,5 +1,8 @@
 package br.com.vfc.ppmtool.web.errors;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class MessageError {
 
     private String objectName;
@@ -11,6 +14,10 @@ public class MessageError {
     private String defaultMessage;
 
     public MessageError() {
+    }
+
+    public MessageError(String rejectedValue, String defaultMessage) {
+        this("project", "projectIdentifier", rejectedValue, defaultMessage);
     }
 
     public MessageError(String objectName, String field, String rejectedValue, String defaultMessage) {

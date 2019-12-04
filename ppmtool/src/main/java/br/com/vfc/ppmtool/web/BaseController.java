@@ -4,6 +4,9 @@ import br.com.vfc.ppmtool.web.errors.MessageErrors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.net.URI;
 
 public abstract class BaseController {
 
@@ -15,4 +18,10 @@ public abstract class BaseController {
         }
         return null;
     }
+
+    protected URI createURI(String relativePath, Object id, UriComponentsBuilder builder) {
+
+        return builder.replacePath(relativePath).buildAndExpand(id).toUri();
+    }
+
 }

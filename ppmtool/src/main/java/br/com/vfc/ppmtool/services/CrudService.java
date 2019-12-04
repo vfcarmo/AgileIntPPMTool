@@ -11,7 +11,7 @@ public interface CrudService<T extends BaseEntity, ID> {
      * Return all records of the Entity.
      * @return Records of the Entity.
      */
-    Iterable<T> findAll();
+    List<T> findAll();
 
     /**
      * Return the entity with the given id.
