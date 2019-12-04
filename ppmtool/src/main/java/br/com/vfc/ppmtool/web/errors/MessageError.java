@@ -16,8 +16,13 @@ public class MessageError {
     public MessageError() {
     }
 
-    public MessageError(String rejectedValue, String defaultMessage) {
-        this("project", "projectIdentifier", rejectedValue, defaultMessage);
+    public MessageError(String defaultMessage) {
+        this(null, defaultMessage);
+    }
+
+    public MessageError(String objectName, String defaultMessage) {
+        this.objectName = objectName;
+        this.defaultMessage = defaultMessage;
     }
 
     public MessageError(String objectName, String field, String rejectedValue, String defaultMessage) {

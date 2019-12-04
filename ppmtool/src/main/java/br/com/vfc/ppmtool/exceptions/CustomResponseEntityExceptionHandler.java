@@ -15,7 +15,14 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
 
     @ExceptionHandler(value = ProjectConflictException.class)
     public ResponseEntity<?> handleProjectConflictException(ProjectConflictException ex, WebRequest request) {
-        MessageError error = new MessageError(ex.getRejectedValue(), ex.getLocalizedMessage());
+        MessageError error = new MessageError("project", "projectIdentifier",
+                ex.getRejectedValue(), ex.getLocalizedMessage());
         return new ResponseEntity<MessageError>(error, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(value = ProjectNotFoundException.class)
+    public ResponseEntity<?> handleProjectNotFoundException(ProjectNotFoundException ex, WebRequest request) {
+        MessageError error = new MessageError("project", ex.getLocalizedMessage());
+        return new ResponseEntity<MessageError>(error, HttpStatus.NOT_FOUND);
     }
 }
