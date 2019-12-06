@@ -1,5 +1,6 @@
 package br.com.vfc.ppmtool.domain;
 
+import br.com.vfc.ppmtool.exceptions.ErrorCode;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.validator.constraints.Length;
 
@@ -11,15 +12,15 @@ import java.util.Date;
 @Entity
 public class Project extends BaseEntity {
 
-    @NotBlank(message = "Project name is required.")
+    @NotBlank(message = ErrorCode.NOT_BLANK)
     private String projectName;
 
-    @NotBlank(message = "Project identifier is requided.")
-    @Size(min = 4, max = 5, message = "Project identifier must have 4 to 5 characters.")
+    @NotBlank(message = ErrorCode.NOT_BLANK)
+    @Size(min = 4, max = 5, message = ErrorCode.SIZE)
     @Column(updatable = false, unique = true)
     private String projectIdentifier;
 
-    @NotBlank(message = "Project description is required.")
+    @NotBlank(message = ErrorCode.NOT_BLANK)
     private String description;
 
     @JsonFormat(pattern = "yyyy-MM-dd")

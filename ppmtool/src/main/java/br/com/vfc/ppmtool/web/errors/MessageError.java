@@ -1,66 +1,78 @@
 package br.com.vfc.ppmtool.web.errors;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonRootName;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonRootName("error")
 public class MessageError {
 
-    private String objectName;
+    /** A URI identifier that categorizes the error. */ // /errors/incorrect-user-pass
+    private String type;
 
-    private String field;
+    /** A brief, human-readable message about the error. */ // Incorrect username or password
+    private String title;
 
-    private String rejectedValue;
+    /** The HTTP response coee (optional). */ // 403
+    private String status;
 
-    private String defaultMessage;
+    /** A human-readable explanation of the error. */ // Authentication failed due to incorrect username or password
+    private String detail;
+
+    /** A URI that identifies the specific occurrence of the error. */ // /login/log/abc123
+    private String instance;
+
+    /** A URL that clients can follow to discover more information. */ //https://example.com/help/error/incorrect-user-pass
+    private String help;
 
     public MessageError() {
     }
 
-    public MessageError(String defaultMessage) {
-        this(null, defaultMessage);
+    public String getType() {
+        return type;
     }
 
-    public MessageError(String objectName, String defaultMessage) {
-        this.objectName = objectName;
-        this.defaultMessage = defaultMessage;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public MessageError(String objectName, String field, String rejectedValue, String defaultMessage) {
-        this.objectName = objectName;
-        this.field = field;
-        this.rejectedValue = rejectedValue;
-        this.defaultMessage = defaultMessage;
+    public String getTitle() {
+        return title;
     }
 
-    public String getObjectName() {
-        return objectName;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public void setObjectName(String objectName) {
-        this.objectName = objectName;
+    public String getStatus() {
+        return status;
     }
 
-    public String getField() {
-        return field;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public void setField(String field) {
-        this.field = field;
+    public String getDetail() {
+        return detail;
     }
 
-    public String getRejectedValue() {
-        return rejectedValue;
+    public void setDetail(String detail) {
+        this.detail = detail;
     }
 
-    public void setRejectedValue(String rejectedValue) {
-        this.rejectedValue = rejectedValue;
+    public String getInstance() {
+        return instance;
     }
 
-    public String getDefaultMessage() {
-        return defaultMessage;
+    public void setInstance(String instance) {
+        this.instance = instance;
     }
 
-    public void setDefaultMessage(String defaultMessage) {
-        this.defaultMessage = defaultMessage;
+    public String getHelp() {
+        return help;
+    }
+
+    public void setHelp(String help) {
+        this.help = help;
     }
 }

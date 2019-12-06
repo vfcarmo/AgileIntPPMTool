@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: ppmtool
+  messages:
+    basename: messages
+  jackson:
+    default-property-inclusion: non_null
+
+logging:
+  level:
+    org:
+      springframework: INFO
