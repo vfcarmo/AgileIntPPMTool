@@ -33,14 +33,13 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public Project findById(Long id) {
         return projectRepository.findById(id).orElseThrow(() ->
-                new ProjectNotFoundException("Project with the given id not found."));
+                new ProjectNotFoundException(id));
     }
 
     @Override
     public Project findByProjectIdentifier(String projectIdentifier) {
         return projectRepository.findByProjectIdentifier(projectIdentifier.toUpperCase()).orElseThrow(() ->
-                new ProjectNotFoundException(String.format("Project with the given project identifier (%s) not found.",
-                        projectIdentifier)));
+                new ProjectNotFoundException(projectIdentifier));
     }
 
     @Override
@@ -50,7 +49,7 @@ public class ProjectServiceImpl implements ProjectService {
             entity.setProjectIdentifier(entity.getProjectIdentifier().toUpperCase());
             savedProject = projectRepository.save(entity);
         } catch (Exception e) {
-            throw new ProjectConflictException(entity.getProjectIdentifier(), "Project identifier already exists.");
+            throw new ProjectConflictException(entity.getProjectIdentifier());
         }
         return savedProject;
     }

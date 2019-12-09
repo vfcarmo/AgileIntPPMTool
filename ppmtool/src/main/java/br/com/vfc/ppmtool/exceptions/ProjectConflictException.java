@@ -8,16 +8,12 @@ public class ProjectConflictException extends RuntimeException {
 
     private String rejectedValue;
 
-    public ProjectConflictException(String rejectedValue, String message) {
-        super(message);
+    public ProjectConflictException(String rejectedValue) {
+        super(ErrorCode.PROJECT_CONFLICT);
         this.rejectedValue = rejectedValue;
     }
 
     public String getRejectedValue() {
         return rejectedValue;
-    }
-
-    public void setRejectedValue(String rejectedValue) {
-        this.rejectedValue = rejectedValue;
     }
 }

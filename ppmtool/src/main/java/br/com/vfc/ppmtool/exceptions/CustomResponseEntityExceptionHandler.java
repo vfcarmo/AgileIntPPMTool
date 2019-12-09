@@ -19,6 +19,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -30,12 +31,12 @@ import java.util.Locale;
 @RestController
 public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
-    private static final MediaType DEFAULT_MEDIA_TYPE = MediaType.APPLICATION_JSON;
-
     private static final String ERROR_MESSAGE_SUFIX = ".message";
     private static final String ERROR_DETAIL_SUFIX = ".detail";
     private static final String ERROR_TYPE_FORMAT = "errors/%s";
-    private static final String ERROR_INSTANCE_FORMAT = "%s/%s";
+    private static final String ERROR_HELP_FORMAT = "%s/%s";
+    private static final String ERROR_MESSAGE_PREFIX = "error.default.";
+    private static final String STANDARD_ERROR_URI_FORMAT = "standards/%s";
 
     private final MessageSource messageSource;
 
@@ -84,24 +85,23 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
                 HttpStatus.BAD_REQUEST, request);
     }
 
+    @Override
+    protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        return buildDefaultResponseEntity(request);
+    }
+
     @ExceptionHandler(value = ProjectConflictException.class)
     public ResponseEntity<?> handleProjectConflictException(ProjectConflictException ex, WebRequest request) {
-        return buildResponseEntity(ErrorCode.PROJECT_CONFLICT, HttpStatus.CONFLICT, request);
+        return buildResponseEntity(ErrorCode.PROJECT_CONFLICT, HttpStatus.CONFLICT, request, ex.getRejectedValue());
     }
 
     @ExceptionHandler(value = ProjectNotFoundException.class)
     public ResponseEntity<?> handleProjectNotFoundException(ProjectNotFoundException ex, WebRequest request) {
-        return buildResponseEntity(ErrorCode.PROJECT_NOT_FOUND, HttpStatus.NOT_FOUND, request);
-    }
-
-    @ExceptionHandler(value = Exception.class)
-    public ResponseEntity<?> handleInternalServerError(Exception ex, WebRequest request) {
-
-        return buildDefaultResponseEntity(request);
+        return buildResponseEntity(ErrorCode.RESOURCE_NOT_FOUND, HttpStatus.NOT_FOUND, request, ex.getArgs());
     }
 
     private ResponseEntity<Object> buildResponseEntity(String keyMessage,
-                                                              HttpStatus status, WebRequest request, Object... args) {
+                                                       HttpStatus status, WebRequest request, Object... args) {
 
         return buildResponseEntity(status, request, buildMessageError(keyMessage, status, request, args));
     }
@@ -111,7 +111,7 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
         MessageErrors messageErrors = new MessageErrors();
         messageErrors.getErrors().addAll(Arrays.asList(errors));
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(DEFAULT_MEDIA_TYPE);
+        headers.setContentType(MediaType.APPLICATION_PROBLEM_JSON);
         return new ResponseEntity<>(messageErrors, headers, status);
     }
 
@@ -125,13 +125,28 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
     private MessageError buildMessageError(String keyMessage,
                                            HttpStatus status, WebRequest request, Object... args) {
         MessageError error = new MessageError();
-        String errorCode = keyMessage.replace(ERROR_MESSAGE_SUFIX, "");
+        String errorCode = keyMessage
+                .replace(ERROR_MESSAGE_PREFIX, "")
+                .replace(ERROR_MESSAGE_SUFIX, "");
         error.setType(String.format(ERROR_TYPE_FORMAT, errorCode));
         error.setTitle(getMessage(keyMessage, request.getLocale(), args));
         error.setDetail(getDetailMessage(keyMessage, request.getLocale(), args));
-        error.setHelp(String.format(ERROR_INSTANCE_FORMAT, getMessage(ErrorCode.ERROR_PAGE, request.getLocale()), errorCode));
-        error.setInstance(request.getContextPath());
+        error.setStatus(String.valueOf(status.value()));
+        error.setHelp(String.format(ERROR_HELP_FORMAT, getMessage(ErrorCode.ERROR_PAGE, request.getLocale()),
+                (keyMessage.startsWith(ERROR_MESSAGE_PREFIX)) ?
+                        String.format(STANDARD_ERROR_URI_FORMAT, errorCode) : errorCode ));
+        error.setInstance(getDecodeUrl(request));
         return error;
+    }
+
+    private String getDecodeUrl(WebRequest request) {
+        String instance;
+        try {
+            instance = ((ServletWebRequest) request).getRequest().getRequestURI();
+        } catch (Exception e) {
+            instance = null;
+        }
+        return instance;
     }
 
     private String getMessage(String keyMessage, Locale locale, Object... args) {

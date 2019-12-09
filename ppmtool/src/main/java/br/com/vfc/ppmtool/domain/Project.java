@@ -1,15 +1,20 @@
 package br.com.vfc.ppmtool.domain;
 
 import br.com.vfc.ppmtool.exceptions.ErrorCode;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import org.hibernate.validator.constraints.Length;
+import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Entity
+@JsonTypeName(value = "project")
+@JsonPropertyOrder(value = {"id", "projectName", "projectIdentifier",
+        "description", "startDate", "endDate", "createdAt", "updatedAt" })
+@JsonInclude(Include.NON_EMPTY)
 public class Project extends BaseEntity {
 
     @NotBlank(message = ErrorCode.NOT_BLANK)

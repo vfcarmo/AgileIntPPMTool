@@ -1,6 +1,7 @@
 package br.com.vfc.ppmtool.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -22,6 +23,7 @@ public abstract class BaseEntity implements Serializable {
     @Column(name = "updated_at")
     private Date updatedAt;
 
+    @JsonIgnore
     @Version
     private Long version;
 

@@ -1,28 +1,33 @@
 package br.com.vfc.ppmtool.web.errors;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonRootName;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
+import javax.xml.bind.annotation.XmlType;
 
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-@JsonRootName("error")
+@JsonTypeName("error")
+@JsonPropertyOrder(value = {"type", "title", "detail", "status", "instance", "help" })
+@XmlType(name = "error", propOrder = {"type", "title", "detail", "status", "instance", "help" })
 public class MessageError {
 
-    /** A URI identifier that categorizes the error. */ // /errors/incorrect-user-pass
+    /** A URI identifier that categorizes the error. */
     private String type;
 
-    /** A brief, human-readable message about the error. */ // Incorrect username or password
+    /** A brief, human-readable message about the error. */
     private String title;
 
-    /** The HTTP response coee (optional). */ // 403
+    /** The HTTP response coee (optional). */
     private String status;
 
-    /** A human-readable explanation of the error. */ // Authentication failed due to incorrect username or password
+    /** A human-readable explanation of the error. */
     private String detail;
 
-    /** A URI that identifies the specific occurrence of the error. */ // /login/log/abc123
+    /** A URI that identifies the specific occurrence of the error. */
     private String instance;
 
-    /** A URL that clients can follow to discover more information. */ //https://example.com/help/error/incorrect-user-pass
+    /** A URL that clients can follow to discover more information. */
     private String help;
 
     public MessageError() {

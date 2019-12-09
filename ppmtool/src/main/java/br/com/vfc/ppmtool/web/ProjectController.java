@@ -25,7 +25,7 @@ public class ProjectController extends BaseController {
         this.projectService = projectService;
     }
 
-    @GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> listAllProjects() {
 
         List<Project> projects = projectService.findAll();
@@ -33,7 +33,7 @@ public class ProjectController extends BaseController {
         return ResponseEntity.ok(projects);
     }
 
-    @GetMapping(value = "/{projectIdentifier}", produces = { MediaType.APPLICATION_JSON_VALUE })
+    @GetMapping(value = "/{projectIdentifier}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> findProject(@PathVariable String projectIdentifier) {
 
         Project savedProject = projectService.findByProjectIdentifier(projectIdentifier);
@@ -41,7 +41,7 @@ public class ProjectController extends BaseController {
         return ResponseEntity.ok(savedProject);
     }
 
-    @PostMapping(produces = { MediaType.APPLICATION_JSON_VALUE })
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createNewProject(@Valid @RequestBody Project request,
                                               UriComponentsBuilder builder) {
 
@@ -51,7 +51,7 @@ public class ProjectController extends BaseController {
         return ResponseEntity.created(uri).body(savedProject);
     }
 
-    @PutMapping(value = "/{projectIdentifier}", produces = { MediaType.APPLICATION_JSON_VALUE })
+    @PutMapping(value = "/{projectIdentifier}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateProject(@PathVariable String projectIdentifier,
                                            @Valid @RequestBody ProjectUpdateRequest request) {
         Project updateProject = projectService.findByProjectIdentifier(projectIdentifier);
@@ -62,7 +62,7 @@ public class ProjectController extends BaseController {
         return ResponseEntity.ok(updatedProject);
     }
 
-    @DeleteMapping(value = "/{projectIdentifier}", produces = { MediaType.APPLICATION_JSON_VALUE })
+    @DeleteMapping(value = "/{projectIdentifier}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deleteProjectByProjectIdentifier(@PathVariable String projectIdentifier) {
 
         projectService.deleteByProjectIdentifier(projectIdentifier);
