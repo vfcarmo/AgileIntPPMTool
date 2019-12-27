@@ -1,6 +1,8 @@
 package br.com.vfc.ppmtool.web.requests;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
@@ -15,10 +17,12 @@ public class ProjectUpdateRequest {
     private String description;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty("start_date")
     @Column(name = "start_date")
     private Date startDate;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty("end_date")
     @Column(name = "end_date")
     private Date endDate;
 

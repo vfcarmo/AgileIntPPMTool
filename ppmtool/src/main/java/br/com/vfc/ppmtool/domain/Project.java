@@ -29,10 +29,12 @@ public class Project extends BaseEntity {
     private String description;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty("start_date")
     @Column(name = "start_date")
     private Date startDate;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty("end_date")
     @Column(name = "end_date")
     private Date endDate;
 
