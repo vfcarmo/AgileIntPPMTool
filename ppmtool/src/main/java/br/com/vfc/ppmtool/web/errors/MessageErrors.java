@@ -6,7 +6,7 @@ import javax.xml.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@JsonRootName("errors")
+@JsonRootName("messageErrorApi")
 @XmlRootElement(name = "messageErrorApi")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class MessageErrors {
