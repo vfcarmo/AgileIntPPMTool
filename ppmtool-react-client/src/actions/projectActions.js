@@ -28,11 +28,9 @@ export const getProjects = () => async dispatch => {
   }
 };
 
-export const getProject = projectIdentifier => async dispatch => {
+export const getProject = (id, history) => async dispatch => {
   try {
-    const res = await axios.get(
-      "http://localhost:8080/api/project/" + projectIdentifier
-    );
+    const res = await axios.get(`http://localhost:8080/api/project/${id}`);
     dispatch({
       type: GET_PROJECT,
       payload: res.data
@@ -58,7 +56,7 @@ export const updateProject = (project, history) => async dispatch => {
     const updateProject = makeUpdateProject(project);
 
     const res = await axios.post(
-      "http://localhost:8080/api/project" + project.projectIdentifier,
+      `http://localhost:8080/api/project${project.projectIdentifier}`,
       updateProject
     );
     history.push("/dashboard");
