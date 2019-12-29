@@ -1,5 +1,5 @@
 import axios from "axios";
-import { GET_ERRORS, GET_PROJECTS } from "./types";
+import { GET_ERRORS, GET_PROJECTS, GET_PROJECT } from "./types";
 
 export const createProject = (project, history) => async dispatch => {
   try {
@@ -20,6 +20,48 @@ export const getProjects = () => async dispatch => {
       type: GET_PROJECTS,
       payload: res.data
     });
+  } catch (error) {
+    dispatch({
+      type: GET_ERRORS,
+      payload: transformErrorToProjectError(error.response.data)
+    });
+  }
+};
+
+export const getProject = projectIdentifier => async dispatch => {
+  try {
+    const res = await axios.get(
+      "http://localhost:8080/api/project/" + projectIdentifier
+    );
+    dispatch({
+      type: GET_PROJECT,
+      payload: res.data
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_ERRORS,
+      payload: transformErrorToProjectError(error.response.data)
+    });
+  }
+};
+
+export const updateProject = (project, history) => async dispatch => {
+  try {
+    function makeUpdateProject(project) {
+      return {
+        projectName: project.projectName,
+        description: project.description,
+        startDate: project.startDate,
+        endDate: project.endDate
+      };
+    }
+    const updateProject = makeUpdateProject(project);
+
+    const res = await axios.post(
+      "http://localhost:8080/api/project" + project.projectIdentifier,
+      updateProject
+    );
+    history.push("/dashboard");
   } catch (error) {
     dispatch({
       type: GET_ERRORS,
