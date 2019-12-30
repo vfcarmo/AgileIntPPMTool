@@ -49,14 +49,14 @@ export const updateProject = (project, history) => async dispatch => {
       return {
         projectName: project.projectName,
         description: project.description,
-        startDate: project.startDate,
-        endDate: project.endDate
+        start_date: project.start_date,
+        end_date: project.end_date
       };
     }
     const updateProject = makeUpdateProject(project);
 
-    const res = await axios.post(
-      `http://localhost:8080/api/project${project.projectIdentifier}`,
+    const res = await axios.put(
+      `http://localhost:8080/api/project/${project.projectIdentifier}`,
       updateProject
     );
     history.push("/dashboard");

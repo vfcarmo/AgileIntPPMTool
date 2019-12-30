@@ -16,7 +16,7 @@ public abstract class BaseEntity implements Serializable {
     private Long id;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @Column(name = "created_at")
+    @Column(name = "created_at", updatable = false)
     private Date createdAt;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
