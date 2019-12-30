@@ -2,6 +2,10 @@ package br.com.vfc.ppmtool.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.apache.catalina.util.ToStringUtil;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+import org.springframework.core.style.ToStringStyler;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -69,6 +73,11 @@ public abstract class BaseEntity implements Serializable {
         this.version = version;
     }
 
+    @JsonIgnore
+    public boolean isNew() {
+        return this.id == null;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -80,5 +89,10 @@ public abstract class BaseEntity implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SIMPLE_STYLE);
     }
 }

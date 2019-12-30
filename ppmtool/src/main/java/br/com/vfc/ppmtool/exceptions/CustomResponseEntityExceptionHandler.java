@@ -95,8 +95,8 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
         return buildResponseEntity(ErrorCode.PROJECT_CONFLICT, HttpStatus.CONFLICT, request, ex.getRejectedValue());
     }
 
-    @ExceptionHandler(value = ProjectNotFoundException.class)
-    public ResponseEntity<?> handleProjectNotFoundException(ProjectNotFoundException ex, WebRequest request) {
+    @ExceptionHandler(value = ResourceNotFoundException.class)
+    public ResponseEntity<?> handleProjectNotFoundException(ResourceNotFoundException ex, WebRequest request) {
         return buildResponseEntity(ErrorCode.RESOURCE_NOT_FOUND, HttpStatus.NOT_FOUND, request, ex.getArgs());
     }
 

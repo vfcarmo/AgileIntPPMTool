@@ -2,7 +2,7 @@ package br.com.vfc.ppmtool.web;
 
 import br.com.vfc.ppmtool.domain.Project;
 import br.com.vfc.ppmtool.exceptions.CustomResponseEntityExceptionHandler;
-import br.com.vfc.ppmtool.exceptions.ProjectNotFoundException;
+import br.com.vfc.ppmtool.exceptions.ResourceNotFoundException;
 import br.com.vfc.ppmtool.fixture.ProjectFixture;
 import br.com.vfc.ppmtool.services.ProjectService;
 import br.com.vfc.ppmtool.web.requests.ProjectUpdateRequest;
@@ -95,7 +95,7 @@ class ProjectControllerTest {
 
         String noMatchingIdentifier = "noMatchingIdentifier";
         Mockito.when(projectService.findByProjectIdentifier(noMatchingIdentifier))
-                .thenThrow(new ProjectNotFoundException(noMatchingIdentifier));
+                .thenThrow(new ResourceNotFoundException(noMatchingIdentifier));
 
         given()
             .log().ifValidationFails()

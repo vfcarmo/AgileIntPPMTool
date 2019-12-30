@@ -4,8 +4,7 @@ import br.com.vfc.ppmtool.exceptions.ErrorCode;
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.Date;
@@ -30,13 +29,15 @@ public class Project extends BaseEntity {
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty("start_date")
-    @Column(name = "start_date")
     private Date startDate;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty("end_date")
-    @Column(name = "end_date")
     private Date endDate;
+
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "project")
+
+    private Backlog backlog;
 
     public Project() {
     }
@@ -54,7 +55,7 @@ public class Project extends BaseEntity {
     }
 
     public void setProjectIdentifier(String projectIdentifier) {
-        this.projectIdentifier = projectIdentifier;
+        this.projectIdentifier = projectIdentifier.toUpperCase();
     }
 
     public String getDescription() {
@@ -79,5 +80,14 @@ public class Project extends BaseEntity {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+
+    public Backlog getBacklog() {
+        return backlog;
+    }
+
+    public void setBacklog(Backlog backlog) {
+        this.backlog = backlog;
+        backlog.setProject(this);
     }
 }

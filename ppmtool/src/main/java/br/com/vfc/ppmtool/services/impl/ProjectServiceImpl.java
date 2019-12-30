@@ -1,8 +1,10 @@
 package br.com.vfc.ppmtool.services.impl;
 
+import br.com.vfc.ppmtool.domain.Backlog;
 import br.com.vfc.ppmtool.domain.Project;
 import br.com.vfc.ppmtool.exceptions.ProjectConflictException;
-import br.com.vfc.ppmtool.exceptions.ProjectNotFoundException;
+import br.com.vfc.ppmtool.exceptions.ResourceNotFoundException;
+import br.com.vfc.ppmtool.repositories.BacklogRepository;
 import br.com.vfc.ppmtool.repositories.ProjectRepository;
 import br.com.vfc.ppmtool.services.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +18,13 @@ import java.util.stream.StreamSupport;
 public class ProjectServiceImpl implements ProjectService {
 
     private ProjectRepository projectRepository;
+    private BacklogRepository backlogRepository;
+
 
     @Autowired
-    public ProjectServiceImpl(ProjectRepository projectRepository) {
+    public ProjectServiceImpl(ProjectRepository projectRepository, BacklogRepository backlogRepository) {
         this.projectRepository = projectRepository;
+        this.backlogRepository = backlogRepository;
     }
 
     @Override
@@ -33,20 +38,29 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public Project findById(Long id) {
         return projectRepository.findById(id).orElseThrow(() ->
-                new ProjectNotFoundException(id));
+                new ResourceNotFoundException(id));
     }
 
     @Override
     public Project findByProjectIdentifier(String projectIdentifier) {
         return projectRepository.findByProjectIdentifier(projectIdentifier.toUpperCase()).orElseThrow(() ->
-                new ProjectNotFoundException(projectIdentifier));
+                new ResourceNotFoundException(projectIdentifier));
     }
 
     @Override
     public Project save(Project entity) {
         Project savedProject;
         try {
-            entity.setProjectIdentifier(entity.getProjectIdentifier().toUpperCase());
+            if (entity.isNew()) {
+                Backlog backlog = new Backlog();
+                backlog.setProjectIdentifier(entity.getProjectIdentifier());
+                entity.setBacklog(backlog);
+            } else {
+                entity.setBacklog(backlogRepository.findByProjectIdentifier(entity.getProjectIdentifier())
+                        .orElseThrow(() -> new ResourceNotFoundException(entity.getProjectIdentifier()))
+                );
+            }
+
             savedProject = projectRepository.save(entity);
         } catch (Exception e) {
             throw new ProjectConflictException(entity.getProjectIdentifier());

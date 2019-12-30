@@ -7,18 +7,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
-public class ProjectNotFoundException extends RuntimeException {
+public class ResourceNotFoundException extends RuntimeException {
 
     private List<Object> args = new ArrayList<>();
 
-    public ProjectNotFoundException(String projectIdentifier) {
+    public ResourceNotFoundException(String projectIdentifier) {
         super(ErrorCode.RESOURCE_NOT_FOUND);
         if (projectIdentifier != null) {
             args.add(projectIdentifier);
         }
     }
 
-    public ProjectNotFoundException(Long id) {
+    public ResourceNotFoundException(Long id) {
         super(ErrorCode.RESOURCE_NOT_FOUND);
         if (id != null) {
             args.add(id);
