@@ -1,5 +1,6 @@
 package br.com.vfc.ppmtool.web.requests;
 
+import br.com.vfc.ppmtool.exceptions.ErrorCode;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -10,10 +11,10 @@ import java.util.Date;
 
 public class ProjectUpdateRequest {
 
-    @NotBlank(message = "Project name is required.")
+    @NotBlank(message = ErrorCode.NOT_BLANK)
     private String projectName;
 
-    @NotBlank(message = "Project description is required.")
+    @NotBlank(message = ErrorCode.NOT_BLANK)
     private String description;
 
     @JsonFormat(pattern = "yyyy-MM-dd")

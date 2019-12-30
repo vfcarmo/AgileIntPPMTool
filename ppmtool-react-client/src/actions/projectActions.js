@@ -5,6 +5,10 @@ export const createProject = (project, history) => async dispatch => {
   try {
     const res = await axios.post("http://localhost:8080/api/project", project);
     history.push("/dashboard");
+    dispatch({
+      type: GET_ERRORS,
+      payload: {}
+    });
   } catch (error) {
     dispatch({
       type: GET_ERRORS,
@@ -14,18 +18,11 @@ export const createProject = (project, history) => async dispatch => {
 };
 
 export const getProjects = () => async dispatch => {
-  try {
-    const res = await axios.get("http://localhost:8080/api/project");
-    dispatch({
-      type: GET_PROJECTS,
-      payload: res.data
-    });
-  } catch (error) {
-    dispatch({
-      type: GET_ERRORS,
-      payload: transformErrorToProjectError(error.response.data)
-    });
-  }
+  const res = await axios.get("http://localhost:8080/api/project");
+  dispatch({
+    type: GET_PROJECTS,
+    payload: res.data
+  });
 };
 
 export const getProject = (id, history) => async dispatch => {
@@ -36,10 +33,7 @@ export const getProject = (id, history) => async dispatch => {
       payload: res.data
     });
   } catch (error) {
-    dispatch({
-      type: GET_ERRORS,
-      payload: transformErrorToProjectError(error.response.data)
-    });
+    history.push("/dashboard");
   }
 };
 
@@ -60,6 +54,10 @@ export const updateProject = (project, history) => async dispatch => {
       updateProject
     );
     history.push("/dashboard");
+    dispatch({
+      type: GET_ERRORS,
+      payload: {}
+    });
   } catch (error) {
     dispatch({
       type: GET_ERRORS,
@@ -74,9 +72,11 @@ function transformErrorToProjectError(data) {
     projectIdentifier: "",
     description: ""
   };
+  window.console.log(data);
   data.errors.map(error => {
     const keys = error.title.split(" ");
     err[keys[0]] = error.title;
   });
+
   return err;
 }

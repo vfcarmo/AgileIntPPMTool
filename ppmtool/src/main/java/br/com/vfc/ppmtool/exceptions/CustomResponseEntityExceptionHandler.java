@@ -154,7 +154,7 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
         try {
             message = messageSource.getMessage(keyMessage, args, locale);
         } catch (Exception e) {
-            message = null;
+            message = keyMessage;
         }
         return message;
     }
