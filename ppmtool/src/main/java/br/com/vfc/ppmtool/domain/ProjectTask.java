@@ -23,6 +23,8 @@ public class ProjectTask extends BaseEntity {
 
     private Integer priority;
 
+    private String status;
+
     private Date dueDate;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
@@ -73,6 +75,14 @@ public class ProjectTask extends BaseEntity {
 
     public void setPriority(Integer priority) {
         this.priority = priority;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Date getDueDate() {

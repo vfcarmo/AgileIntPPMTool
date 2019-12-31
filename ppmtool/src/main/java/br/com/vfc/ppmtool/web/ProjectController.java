@@ -15,7 +15,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/project")
+@RequestMapping("/api/project")
 @CrossOrigin
 public class ProjectController extends BaseController {
 
@@ -47,7 +47,8 @@ public class ProjectController extends BaseController {
                                               UriComponentsBuilder builder) {
 
         Project savedProject = projectService.save(request);
-        URI uri = createURI("/api/project/{projectIdentifier}", savedProject.getProjectIdentifier(), builder);
+        URI uri = createURI("/api/project/{projectIdentifier}",
+                savedProject.getProjectIdentifier(), builder);
 
         return ResponseEntity.created(uri).body(savedProject);
     }

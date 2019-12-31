@@ -1,8 +1,10 @@
 package br.com.vfc.ppmtool.services.impl;
 
+import br.com.vfc.ppmtool.domain.Backlog;
 import br.com.vfc.ppmtool.domain.ProjectTask;
 import br.com.vfc.ppmtool.exceptions.ResourceNotFoundException;
 import br.com.vfc.ppmtool.repositories.ProjectTaskRepository;
+import br.com.vfc.ppmtool.services.BacklogService;
 import br.com.vfc.ppmtool.services.ProjectTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,9 +18,12 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
 
     private ProjectTaskRepository repository;
 
+    private BacklogService backlogService;
+
     @Autowired
-    public ProjectTaskServiceImpl(ProjectTaskRepository repository) {
+    public ProjectTaskServiceImpl(ProjectTaskRepository repository, BacklogService backlogService) {
         this.repository = repository;
+        this.backlogService = backlogService;
     }
 
     @Override
@@ -63,5 +68,28 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
         ProjectTask savedProjectTask = findByProjectIdentifier(projectIdentifier);
 
         repository.delete(savedProjectTask);
+    }
+
+    @Override
+    public ProjectTask addProjectTask(String projectIdentifier, ProjectTask entity) {
+
+        Backlog savedBacklog = backlogService.findByProjectIdentifier(projectIdentifier);
+        entity.setBacklog(savedBacklog);
+
+        Integer backlogSequence = savedBacklog.getPTSequence();
+        backlogSequence++;
+        savedBacklog.setPTSequence(backlogSequence);
+        entity.setProjectSequence(String.format("%s-%s", projectIdentifier, backlogSequence));
+        entity.setProjectIdentifier(projectIdentifier);
+
+        if (entity.getPriority() == null || entity.getPriority() == 0) {
+            entity.setPriority(3);
+        }
+
+        if (entity.getStatus() == null || "".equals(entity.getStatus().trim())) {
+            entity.setStatus("TO-DO");
+        }
+
+        return repository.save(entity);
     }
 }

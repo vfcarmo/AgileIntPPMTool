@@ -4,8 +4,8 @@ import br.com.vfc.ppmtool.domain.Backlog;
 import br.com.vfc.ppmtool.domain.Project;
 import br.com.vfc.ppmtool.exceptions.ProjectConflictException;
 import br.com.vfc.ppmtool.exceptions.ResourceNotFoundException;
-import br.com.vfc.ppmtool.repositories.BacklogRepository;
 import br.com.vfc.ppmtool.repositories.ProjectRepository;
+import br.com.vfc.ppmtool.services.BacklogService;
 import br.com.vfc.ppmtool.services.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,33 +17,33 @@ import java.util.stream.StreamSupport;
 @Service
 public class ProjectServiceImpl implements ProjectService {
 
-    private ProjectRepository projectRepository;
-    private BacklogRepository backlogRepository;
+    private ProjectRepository repository;
+    private BacklogService backlogService;
 
 
     @Autowired
-    public ProjectServiceImpl(ProjectRepository projectRepository, BacklogRepository backlogRepository) {
-        this.projectRepository = projectRepository;
-        this.backlogRepository = backlogRepository;
+    public ProjectServiceImpl(ProjectRepository projectRepository, BacklogService backlogService) {
+        this.repository = projectRepository;
+        this.backlogService = backlogService;
     }
 
     @Override
     public List<Project> findAll() {
 
-        Iterable<Project> projectIterable = projectRepository.findAll();
+        Iterable<Project> projectIterable = repository.findAll();
 
         return StreamSupport.stream(projectIterable.spliterator(), false).collect(Collectors.toList());
     }
 
     @Override
     public Project findById(Long id) {
-        return projectRepository.findById(id).orElseThrow(() ->
+        return repository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException(id));
     }
 
     @Override
     public Project findByProjectIdentifier(String projectIdentifier) {
-        return projectRepository.findByProjectIdentifier(projectIdentifier.toUpperCase()).orElseThrow(() ->
+        return repository.findByProjectIdentifier(projectIdentifier.toUpperCase()).orElseThrow(() ->
                 new ResourceNotFoundException(projectIdentifier));
     }
 
@@ -56,12 +56,10 @@ public class ProjectServiceImpl implements ProjectService {
                 backlog.setProjectIdentifier(entity.getProjectIdentifier());
                 entity.setBacklog(backlog);
             } else {
-                entity.setBacklog(backlogRepository.findByProjectIdentifier(entity.getProjectIdentifier())
-                        .orElseThrow(() -> new ResourceNotFoundException(entity.getProjectIdentifier()))
-                );
+                entity.setBacklog(backlogService.findByProjectIdentifier(entity.getProjectIdentifier()));
             }
 
-            savedProject = projectRepository.save(entity);
+            savedProject = repository.save(entity);
         } catch (Exception e) {
             throw new ProjectConflictException(entity.getProjectIdentifier());
         }
@@ -70,7 +68,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public void deleteById(Long id) {
-        this.projectRepository.deleteById(id);
+        this.repository.deleteById(id);
     }
 
     @Override
@@ -78,6 +76,6 @@ public class ProjectServiceImpl implements ProjectService {
 
         Project savedProject = findByProjectIdentifier(projectIdentifier);
 
-        this.projectRepository.delete(savedProject);
+        this.repository.delete(savedProject);
     }
 }

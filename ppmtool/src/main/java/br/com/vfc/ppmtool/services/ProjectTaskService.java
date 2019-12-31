@@ -16,4 +16,12 @@ public interface ProjectTaskService extends CrudService<ProjectTask, Long> {
      * @param projectIdentifier Project Identifier.
      */
     void deleteByProjectIdentifier(String projectIdentifier);
+
+    /**
+     * Add a ProjectTask.
+     * @param projectIdentifier Project Identifier.
+     * @param entity ProjectTask.
+     * @return Saved ProjectTask.
+     */
+    public ProjectTask addProjectTask(String projectIdentifier, ProjectTask entity);
 }
