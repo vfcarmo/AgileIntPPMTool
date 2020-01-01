@@ -5,6 +5,19 @@ spring:
     basename: messages
   jackson:
     default-property-inclusion: non_null
+  datasource:
+    url: jdbc:mysql://localhost:3306/ppmtool?useSSL=false
+    username: ppmtool
+    password: ppmtool
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL57Dialect
+        format_sql: false
+    show-sql: true
+    hibernate:
+      ddl-auto: update
 
 logging:
   level:

@@ -2,14 +2,23 @@ package br.com.vfc.ppmtool.services;
 
 import br.com.vfc.ppmtool.domain.ProjectTask;
 
+import java.util.List;
+
 public interface ProjectTaskService extends CrudService<ProjectTask, Long> {
 
     /**
-     * Return a ProjectTask by the given Project Identifier.
-     * @param projectIdentifier Project Identifier.
-     * @return ProjectTask.
+     * Return a ProjectTask by the given Project Sequence.
+     * @param projectSequence Project Sequence.
+     * @return Project task.
      */
-    ProjectTask findByProjectIdentifier(String projectIdentifier);
+    ProjectTask findByProjectSequence(String projectSequence);
+
+    /**
+     * Return a list of ProjectTask by the given Project Identifier.
+     * @param projectIdentifier Project Identifier.
+     * @return Project tasks.
+     */
+    List<ProjectTask> findByProjectIdentifier(String projectIdentifier);
 
     /**
      * Deletes a ProjectTask by the given Project Identifier.
@@ -23,5 +32,5 @@ public interface ProjectTaskService extends CrudService<ProjectTask, Long> {
      * @param entity ProjectTask.
      * @return Saved ProjectTask.
      */
-    public ProjectTask addProjectTask(String projectIdentifier, ProjectTask entity);
+    ProjectTask addProjectTask(String projectIdentifier, ProjectTask entity);
 }

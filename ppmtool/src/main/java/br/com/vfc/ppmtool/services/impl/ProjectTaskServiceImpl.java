@@ -40,9 +40,14 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
     }
 
     @Override
-    public ProjectTask findByProjectIdentifier(String projectIdentifier) {
-        return repository.findByProjectIdentifier(projectIdentifier.toUpperCase())
-                .orElseThrow(() -> new ResourceNotFoundException(projectIdentifier));
+    public ProjectTask findByProjectSequence(String projectSequence) {
+        return repository.findByProjectSequence(projectSequence)
+                .orElseThrow(() -> new ResourceNotFoundException(projectSequence));
+    }
+
+    @Override
+    public List<ProjectTask> findByProjectIdentifier(String projectIdentifier) {
+        return repository.findByProjectIdentifierOrderByPriority(projectIdentifier.toUpperCase());
     }
 
     @Override
@@ -65,9 +70,9 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
     @Override
     public void deleteByProjectIdentifier(String projectIdentifier) {
 
-        ProjectTask savedProjectTask = findByProjectIdentifier(projectIdentifier);
+        List<ProjectTask> savedProjectTask = findByProjectIdentifier(projectIdentifier);
 
-        repository.delete(savedProjectTask);
+        repository.deleteAll(savedProjectTask);
     }
 
     @Override

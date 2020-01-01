@@ -36,7 +36,7 @@ public class Project extends BaseEntity {
     private Date endDate;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "project")
-
+    @JsonIgnore
     private Backlog backlog;
 
     public Project() {

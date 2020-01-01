@@ -1,7 +1,10 @@
 package br.com.vfc.ppmtool.web;
 
+import br.com.vfc.ppmtool.domain.Backlog;
 import br.com.vfc.ppmtool.domain.Project;
+import br.com.vfc.ppmtool.services.BacklogService;
 import br.com.vfc.ppmtool.services.ProjectService;
+import br.com.vfc.ppmtool.services.ProjectTaskService;
 import br.com.vfc.ppmtool.web.requests.ProjectUpdateRequest;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +24,15 @@ public class ProjectController extends BaseController {
 
     private ProjectService projectService;
 
+    private BacklogService backlogService;
+
+    private ProjectTaskService projectTaskService;
+
     @Autowired
-    public ProjectController(ProjectService projectService) {
+    public ProjectController(ProjectService projectService, BacklogService backlogService, ProjectTaskService projectTaskService) {
         this.projectService = projectService;
+        this.backlogService = backlogService;
+        this.projectTaskService = projectTaskService;
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -70,5 +79,12 @@ public class ProjectController extends BaseController {
         projectService.deleteByProjectIdentifier(projectIdentifier);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{projectIdentifier}/backlog")
+    public ResponseEntity<?> getProjectBacklog(@PathVariable String projectIdentifier) {
+
+        Backlog savedBacklog = backlogService.findByProjectIdentifier(projectIdentifier);
+        return ResponseEntity.ok(savedBacklog.getTasks());
     }
 }
