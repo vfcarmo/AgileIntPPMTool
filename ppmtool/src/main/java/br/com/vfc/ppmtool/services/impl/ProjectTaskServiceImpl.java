@@ -6,6 +6,8 @@ import br.com.vfc.ppmtool.exceptions.ResourceNotFoundException;
 import br.com.vfc.ppmtool.repositories.ProjectTaskRepository;
 import br.com.vfc.ppmtool.services.BacklogService;
 import br.com.vfc.ppmtool.services.ProjectTaskService;
+import br.com.vfc.ppmtool.web.requests.ProjectTaskUpdateRequest;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,9 +42,14 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
     }
 
     @Override
-    public ProjectTask findByProjectSequence(String projectSequence) {
-        return repository.findByProjectSequence(projectSequence)
+    public ProjectTask findByProjectSequence(String projectIdentifier, String projectSequence) {
+        ProjectTask savedProjectTask = repository.findByProjectSequence(projectSequence)
                 .orElseThrow(() -> new ResourceNotFoundException(projectSequence));
+
+        if (!savedProjectTask.getProjectIdentifier().equals(projectIdentifier)) {
+            throw new ResourceNotFoundException(projectIdentifier);
+        }
+        return savedProjectTask;
     }
 
     @Override
@@ -68,11 +75,11 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
     }
 
     @Override
-    public void deleteByProjectIdentifier(String projectIdentifier) {
+    public void deleteByProjectSequence(String projectIdentifier, String projectSequence) {
 
-        List<ProjectTask> savedProjectTask = findByProjectIdentifier(projectIdentifier);
+        ProjectTask savedProjectTask = findByProjectSequence(projectIdentifier, projectSequence);
 
-        repository.deleteAll(savedProjectTask);
+        this.repository.delete(savedProjectTask);
     }
 
     @Override
@@ -97,4 +104,18 @@ public class ProjectTaskServiceImpl implements ProjectTaskService {
 
         return repository.save(entity);
     }
+
+    @Override
+    public ProjectTask updateProjectTask(String projectIdentifier, String projectSequence, ProjectTaskUpdateRequest entity) {
+
+        ProjectTask savedProjectTask = findByProjectSequence(projectIdentifier, projectSequence);
+        BeanUtils.copyProperties(entity, savedProjectTask);
+
+
+        ProjectTask updatedProjectTask = repository.save(savedProjectTask);
+
+        return updatedProjectTask;
+    }
+
+
 }

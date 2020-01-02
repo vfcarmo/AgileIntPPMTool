@@ -1,5 +1,7 @@
-package br.com.vfc.ppmtool.domain;
+package br.com.vfc.ppmtool.web.requests;
 
+import br.com.vfc.ppmtool.domain.Backlog;
+import br.com.vfc.ppmtool.domain.BaseEntity;
 import br.com.vfc.ppmtool.exceptions.ErrorCode;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -7,14 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
-@Entity
-public class ProjectTask extends BaseEntity {
-
-    @Column(updatable = false, unique = true)
-    private String projectSequence;
-
-    @Column(updatable = false)
-    private String projectIdentifier;
+public class ProjectTaskUpdateRequest {
 
     @NotBlank(message = ErrorCode.NOT_BLANK)
     private String summary;
@@ -27,30 +22,8 @@ public class ProjectTask extends BaseEntity {
 
     private Date dueDate;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "backlog_id", updatable = false, nullable = false)
-    @JsonIgnore
-    private Backlog backlog;
-
-
-    public ProjectTask() {
+    public ProjectTaskUpdateRequest() {
         super();
-    }
-
-    public String getProjectSequence() {
-        return projectSequence;
-    }
-
-    public void setProjectSequence(String projectSequence) {
-        this.projectSequence = projectSequence;
-    }
-
-    public String getProjectIdentifier() {
-        return projectIdentifier;
-    }
-
-    public void setProjectIdentifier(String projectIdentifier) {
-        this.projectIdentifier = projectIdentifier;
     }
 
     public String getSummary() {
@@ -91,13 +64,5 @@ public class ProjectTask extends BaseEntity {
 
     public void setDueDate(Date dueDate) {
         this.dueDate = dueDate;
-    }
-
-    public Backlog getBacklog() {
-        return backlog;
-    }
-
-    public void setBacklog(Backlog backlog) {
-        this.backlog = backlog;
     }
 }

@@ -65,10 +65,10 @@ public class ProjectController extends BaseController {
     @PutMapping(value = "/{projectIdentifier}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateProject(@PathVariable String projectIdentifier,
                                            @Valid @RequestBody ProjectUpdateRequest request) {
-        Project updateProject = projectService.findByProjectIdentifier(projectIdentifier);
-        BeanUtils.copyProperties(request, updateProject);
+        Project savedProject = projectService.findByProjectIdentifier(projectIdentifier);
+        BeanUtils.copyProperties(request, savedProject);
 
-        Project updatedProject = projectService.save(updateProject);
+        Project updatedProject = projectService.save(savedProject);
 
         return ResponseEntity.ok(updatedProject);
     }
