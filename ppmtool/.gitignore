@@ -41,7 +41,7 @@ cmake-build-*/
 
 # Mongo Explorer plugin
 .idea/**/mongoSettings.xml
-mongo-volume/
+mysql-volume/
 
 # File-based project format
 *.iws
