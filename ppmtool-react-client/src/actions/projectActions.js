@@ -3,7 +3,7 @@ import { GET_ERRORS, GET_PROJECTS, GET_PROJECT, DELETE_PROJECT } from "./types";
 
 export const createProject = (project, history) => async dispatch => {
   try {
-    const res = await axios.post("/api/project", project);
+    await axios.post("/api/project", project);
     history.push("/dashboard");
     dispatch({
       type: GET_ERRORS,
@@ -49,10 +49,7 @@ export const updateProject = (project, history) => async dispatch => {
     }
     const updateProject = makeUpdateProject(project);
 
-    const res = await axios.put(
-      `/api/project/${project.projectIdentifier}`,
-      updateProject
-    );
+    await axios.put(`/api/project/${project.projectIdentifier}`, updateProject);
     history.push("/dashboard");
     dispatch({
       type: GET_ERRORS,
@@ -91,6 +88,5 @@ function transformErrorToProjectError(data) {
     const keys = error.title.split(" ");
     err[keys[0]] = error.title;
   });
-
   return err;
 }
