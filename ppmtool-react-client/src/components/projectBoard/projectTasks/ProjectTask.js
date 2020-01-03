@@ -9,24 +9,35 @@ class ProjectTask extends Component {
     this.props.deleteProjectTask(backlog_id, pt_id);
   };
   render() {
-    const { id } = 0;
-    const { pt_id } = 0;
+    const { id } = this.props;
+    const { pt } = this.props;
+    let priorityString;
+    let priorityClass;
+
+    if (pt.priority === 1) {
+      priorityClass = "bg-danger text-light";
+      priorityString = "HIGH";
+    } else if (pt.priority === 2) {
+      priorityClass = "bg-warning text-light";
+      priorityString = "MEDIUM";
+    } else {
+      priorityClass = "bg-info text-light";
+      priorityString = "LOW";
+    }
     return (
       <div className="card mb-1 bg-light">
-        <div className="card-header text-primary">
-          ID: projectSequence -- Priority: priorityString
+        <div className={`card-header text-primary ${priorityClass}`}>
+          ID: {pt.projectSequence} -- Priority: {priorityString}
         </div>
         <div className="card-body bg-light">
-          <h5 className="card-title">project_task.summary</h5>
-          <p className="card-text text-truncate ">
-            project_task.acceptanceCriteria
-          </p>
+          <h5 className="card-title">{pt.summary}</h5>
+          <p className="card-text text-truncate ">{pt.acceptanceCriteria}</p>
           <Link to={`/addProjectTask/${id}`} className="btn btn-primary">
             View / Update
           </Link>
 
           <button
-            onClick={this.onDeleteClick.bind(this, id, pt_id)}
+            onClick={this.onDeleteClick.bind(this, id, pt)}
             className="btn btn-danger ml-4"
           >
             Delete

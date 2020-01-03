@@ -7,11 +7,12 @@ import PropTypes from "prop-types";
 
 class ProjectBoard extends Component {
   componentDidMount() {
-    this.props.getBacklog();
+    const { id } = this.props.match.params;
+    this.props.getBacklog(id);
   }
   render() {
-    const { id } = 0;
-    const { project_tasks } = [];
+    const { id } = this.props.match.params;
+    const { project_tasks } = this.props.backlog;
     return (
       <div className="container">
         <Link to={`/addProjectTask/${id}`} className="btn btn-primary mb-3">
@@ -19,27 +20,19 @@ class ProjectBoard extends Component {
         </Link>
         <br />
         <hr />
-        <Backlog />
-        {
-          // {project_tasks.map(projectTask => (
-          //   <Backlog
-          //     key={projectTask.projectSequence}
-          //     projectTask={projectTask}
-          //   />
-          // ))}
-        }
+        <Backlog project_tasks={project_tasks} />
       </div>
     );
   }
 }
 
 ProjectBoard.propTypes = {
-  project_task: PropTypes.object.isRequired,
+  backlog: PropTypes.object.isRequired,
   getBacklog: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
-  project_task: state.project_task
+  backlog: state.backlog
 });
 
 export default connect(mapStateToProps, { getBacklog })(ProjectBoard);
