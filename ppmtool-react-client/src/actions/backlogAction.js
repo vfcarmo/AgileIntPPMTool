@@ -1,5 +1,10 @@
 import axios from "axios";
-import { GET_BACKLOG, GET_PROJECT_TASK, GET_ERRORS } from "../actions/types";
+import {
+  GET_BACKLOG,
+  GET_PROJECT_TASK,
+  DELETE_PROJECT_TASK,
+  GET_ERRORS
+} from "../actions/types";
 
 export const addProjectTask = (
   backlog_id,
@@ -38,6 +43,20 @@ export const getProjctTask = (backlog_id, pt_id, history) => async dispatch => {
     });
   } catch (error) {
     history.push(`/dashboard`);
+  }
+};
+
+export const deleteProjectTask = (backlog_id, pt_id) => async dispatch => {
+  if (
+    window.confirm(
+      "Are you sure? This will delete the project task and all the data related to it."
+    )
+  ) {
+    await axios.delete(`/api/backlog/${backlog_id}/${pt_id}`);
+    dispatch({
+      type: DELETE_PROJECT_TASK,
+      payload: pt_id
+    });
   }
 };
 
