@@ -33,7 +33,12 @@ export const getBacklog = backlog_id => async dispatch => {
       type: GET_BACKLOG,
       payload: res.data
     });
-  } catch (error) {}
+  } catch (error) {
+    dispatch({
+      type: GET_ERRORS,
+      payload: error.response.data
+    });
+  }
 };
 
 export const getProjctTask = (backlog_id, pt_id, history) => async dispatch => {
