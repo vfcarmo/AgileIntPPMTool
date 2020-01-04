@@ -15,7 +15,7 @@ class AddProjectTask extends Component {
       status: "",
       priority: 0,
       dueDate: "",
-      errors: ""
+      errors: {}
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);

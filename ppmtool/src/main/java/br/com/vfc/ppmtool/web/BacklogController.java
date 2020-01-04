@@ -5,7 +5,6 @@ import br.com.vfc.ppmtool.domain.ProjectTask;
 import br.com.vfc.ppmtool.services.BacklogService;
 import br.com.vfc.ppmtool.services.ProjectTaskService;
 import br.com.vfc.ppmtool.web.requests.ProjectTaskUpdateRequest;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

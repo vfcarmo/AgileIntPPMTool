@@ -9,7 +9,7 @@ class ProjectTask extends Component {
     this.props.deleteProjectTask(backlog_id, pt_id);
   };
   render() {
-    const { id } = this.props;
+    const { backlog_id } = this.props;
     const { pt } = this.props;
     let priorityString;
     let priorityClass;
@@ -32,12 +32,19 @@ class ProjectTask extends Component {
         <div className="card-body bg-light">
           <h5 className="card-title">{pt.summary}</h5>
           <p className="card-text text-truncate ">{pt.acceptanceCriteria}</p>
-          <Link to={`/addProjectTask/${id}`} className="btn btn-primary">
+          <Link
+            to={`/updateProjectTask/${backlog_id}/${pt.projectSequence}`}
+            className="btn btn-primary"
+          >
             View / Update
           </Link>
 
           <button
-            onClick={this.onDeleteClick.bind(this, id, pt)}
+            onClick={this.onDeleteClick.bind(
+              this,
+              backlog_id,
+              pt.projectSequence
+            )}
             className="btn btn-danger ml-4"
           >
             Delete
@@ -48,4 +55,8 @@ class ProjectTask extends Component {
   }
 }
 
-export default ProjectTask;
+ProjectTask.propTypes = {
+  deleteProjectTask: PropTypes.func.isRequired
+};
+
+export default connect(null, { deleteProjectTask })(ProjectTask);

@@ -1,6 +1,7 @@
 package br.com.vfc.ppmtool.domain;
 
 import br.com.vfc.ppmtool.exceptions.ErrorCode;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -25,6 +26,7 @@ public class ProjectTask extends BaseEntity {
 
     private String status;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date dueDate;
 
     @ManyToOne(fetch = FetchType.EAGER)

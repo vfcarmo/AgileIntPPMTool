@@ -3,6 +3,7 @@ package br.com.vfc.ppmtool.web.requests;
 import br.com.vfc.ppmtool.domain.Backlog;
 import br.com.vfc.ppmtool.domain.BaseEntity;
 import br.com.vfc.ppmtool.exceptions.ErrorCode;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -20,6 +21,7 @@ public class ProjectTaskUpdateRequest {
 
     private String status;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date dueDate;
 
     public ProjectTaskUpdateRequest() {

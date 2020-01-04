@@ -7,13 +7,18 @@ import ProjectTask from "./projectTasks/ProjectTask";
 
 class Backlog extends Component {
   render() {
+    const { backlog_id } = this.props;
     const { project_tasks } = this.props;
 
     const tasks = project_tasks.map(projectTask => (
-      <ProjectTask key={projectTask.id} pt={projectTask} />
+      <ProjectTask
+        key={projectTask.id}
+        backlog_id={backlog_id}
+        pt={projectTask}
+      />
     ));
 
-    let todoItems = tasks.filter(task => task.props.pt.status == "TO-DO");
+    let todoItems = tasks.filter(task => task.props.pt.status == "TO_DO");
     let inProgressItems = tasks.filter(
       task => task.props.pt.status == "IN_PROGRESS"
     );
