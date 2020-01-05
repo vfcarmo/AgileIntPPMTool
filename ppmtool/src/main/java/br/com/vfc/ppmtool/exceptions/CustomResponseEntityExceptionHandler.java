@@ -95,6 +95,11 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
         return buildResponseEntity(ErrorCode.PROJECT_CONFLICT, HttpStatus.CONFLICT, request, ex.getRejectedValue());
     }
 
+    @ExceptionHandler(value = UserConflictException.class)
+    public ResponseEntity<?> handleUserConflictException(UserConflictException ex, WebRequest request) {
+        return buildResponseEntity(ErrorCode.USER_CONFLICT, HttpStatus.CONFLICT, request, ex.getUsername());
+    }
+
     @ExceptionHandler(value = ResourceNotFoundException.class)
     public ResponseEntity<?> handleProjectNotFoundException(ResourceNotFoundException ex, WebRequest request) {
         return buildResponseEntity(ErrorCode.RESOURCE_NOT_FOUND, HttpStatus.NOT_FOUND, request, ex.getArgs());
@@ -164,6 +169,11 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
         keyMessage = (keyMessage.endsWith(ERROR_MESSAGE_SUFIX)) ?
                 keyMessage.replace(ERROR_MESSAGE_SUFIX, ERROR_DETAIL_SUFIX) : null;
 
-        return getMessage(keyMessage, locale, args);
+        String message = getMessage(keyMessage, locale, args);
+
+        if (message.startsWith("error.")) {
+            message = null;
+        }
+        return message;
     }
 }

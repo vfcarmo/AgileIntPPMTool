@@ -7,6 +7,9 @@ public interface ErrorCode {
     String MEDIA_TYPE_NOT_SUPPORTABLE = "error.mediaTypeNotSupported.message";
     String JSON_REQUEST_MALFORMED = "error.jsonRequestMalformed.message";
     String MESSAGE_NOT_ACCEPTABLE = "error.messageNotAcceptable.message";
+    String UNAUTHORIZED = "error.unauthorized.message";
+    String USERNAME_INVALID = "error.usernameInvalid.message";
+    String PASSWORD_INVALID = "error.passwordInvalid.message";
 
     String INTERNAL_SERVER_ERROR = "error.internalServerError.message";
     String SERVICE_UNAVAILABLE = "error.serviceUnavailable.message";
@@ -38,6 +41,8 @@ public interface ErrorCode {
     String NOT_NULL = "error.default.notNull.message";
     String NULL = "error.default.null.message";
 
+    String PASSWORD_CONFIRM = "error.passwordConfirm.message";
     String RESOURCE_NOT_FOUND = "error.notFound.message";
     String PROJECT_CONFLICT = "error.projectConflict.message";
+    String USER_CONFLICT = "error.userConflict.message";
 }
