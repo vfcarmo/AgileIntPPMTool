@@ -9,9 +9,12 @@ import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 @Entity
+@Table(uniqueConstraints = {
+        @UniqueConstraint(name = "uk_project_sequence", columnNames = "projectSequence")
+})
 public class ProjectTask extends BaseEntity {
 
-    @Column(updatable = false, unique = true)
+    @Column(updatable = false)
     private String projectSequence;
 
     @Column(updatable = false)
@@ -30,7 +33,7 @@ public class ProjectTask extends BaseEntity {
     private Date dueDate;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "backlog_id", updatable = false, nullable = false)
+    @JoinColumn(name = "backlog_id", updatable = false, nullable = false, foreignKey = @ForeignKey(name = "fk_backlog"))
     @JsonIgnore
     private Backlog backlog;
 

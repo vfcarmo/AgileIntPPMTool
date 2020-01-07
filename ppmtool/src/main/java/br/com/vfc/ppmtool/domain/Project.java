@@ -10,6 +10,9 @@ import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Entity
+@Table(uniqueConstraints = {
+        @UniqueConstraint(name = "uk_project_identifier", columnNames = "projectIdentifier")
+})
 @JsonTypeName(value = "project")
 @JsonPropertyOrder(value = {"id", "projectName", "projectIdentifier",
         "description", "startDate", "endDate", "createdAt", "updatedAt" })
@@ -21,8 +24,10 @@ public class Project extends BaseEntity {
 
     @NotBlank(message = ErrorCode.NOT_BLANK)
     @Size(min = 4, max = 5, message = ErrorCode.SIZE)
-    @Column(updatable = false, unique = true)
+    @Column(updatable = false)
     private String projectIdentifier;
+
+    private String projectLeader;
 
     @NotBlank(message = ErrorCode.NOT_BLANK)
     private String description;
@@ -34,6 +39,11 @@ public class Project extends BaseEntity {
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty("end_date")
     private Date endDate;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_user"))
+    @JsonIgnore
+    private User user;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "project")
     @JsonIgnore
@@ -58,6 +68,14 @@ public class Project extends BaseEntity {
         this.projectIdentifier = projectIdentifier.toUpperCase();
     }
 
+    public String getProjectLeader() {
+        return projectLeader;
+    }
+
+    public void setProjectLeader(String projectLeader) {
+        this.projectLeader = projectLeader;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -80,6 +98,14 @@ public class Project extends BaseEntity {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Backlog getBacklog() {

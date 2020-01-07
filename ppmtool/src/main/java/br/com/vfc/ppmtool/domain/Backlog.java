@@ -15,7 +15,7 @@ public class Backlog extends BaseEntity {
     private String projectIdentifier;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "project_id", nullable = false)
+    @JoinColumn(name = "project_id", nullable = false, foreignKey = @ForeignKey(name = "fk_project"))
     @JsonIgnore
     private Project project;
 

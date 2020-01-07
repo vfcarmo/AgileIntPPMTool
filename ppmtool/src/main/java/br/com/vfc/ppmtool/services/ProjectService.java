@@ -12,6 +12,14 @@ public interface ProjectService extends CrudService<Project, Long> {
     Project findByProjectIdentifier(String projectIdentifier);
 
     /**
+     * Save a Project.
+     * @param entity Project.
+     * @param username Username
+     * @return Project saved.
+     */
+    Project save(Project entity, String username);
+
+    /**
      * Deletes a Project by the given Project Identifier.
      * @param projectIdentifier Project Identifier.
      */

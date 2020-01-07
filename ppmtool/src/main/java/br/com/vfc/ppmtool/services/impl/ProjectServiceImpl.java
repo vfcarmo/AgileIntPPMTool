@@ -2,9 +2,11 @@ package br.com.vfc.ppmtool.services.impl;
 
 import br.com.vfc.ppmtool.domain.Backlog;
 import br.com.vfc.ppmtool.domain.Project;
+import br.com.vfc.ppmtool.domain.User;
 import br.com.vfc.ppmtool.exceptions.ProjectConflictException;
 import br.com.vfc.ppmtool.exceptions.ResourceNotFoundException;
 import br.com.vfc.ppmtool.repositories.ProjectRepository;
+import br.com.vfc.ppmtool.repositories.UserRepository;
 import br.com.vfc.ppmtool.services.BacklogService;
 import br.com.vfc.ppmtool.services.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +21,14 @@ public class ProjectServiceImpl implements ProjectService {
 
     private ProjectRepository repository;
     private BacklogService backlogService;
+    private UserRepository userRepository;
 
 
     @Autowired
-    public ProjectServiceImpl(ProjectRepository projectRepository, BacklogService backlogService) {
+    public ProjectServiceImpl(ProjectRepository projectRepository, BacklogService backlogService, UserRepository userRepository) {
         this.repository = projectRepository;
         this.backlogService = backlogService;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -60,6 +64,23 @@ public class ProjectServiceImpl implements ProjectService {
             }
 
             savedProject = repository.save(entity);
+        } catch (Exception e) {
+            throw new ProjectConflictException(entity.getProjectIdentifier());
+        }
+        return savedProject;
+    }
+
+    @Override
+    public Project save(Project entity, String username) {
+        Project savedProject;
+        try {
+
+            User user  = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new ResourceNotFoundException(username));
+            entity.setUser(user);
+            entity.setProjectLeader(user.getUsername());
+
+            savedProject = save(entity);
         } catch (Exception e) {
             throw new ProjectConflictException(entity.getProjectIdentifier());
         }

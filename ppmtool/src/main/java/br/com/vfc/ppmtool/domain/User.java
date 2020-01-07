@@ -7,21 +7,23 @@ import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
+@Table(uniqueConstraints = {
+        @UniqueConstraint(name = "uk_username", columnNames = {"username"})
+})
 @UserValidation(message = ErrorCode.PASSWORD_CONFIRM)
 public class User extends BaseEntity implements UserDetails {
 
     @Email(message = ErrorCode.EMAIL)
     @NotBlank(message = ErrorCode.NOT_BLANK)
-    @Column(unique = true)
     private String username;
 
     @NotBlank(message = ErrorCode.NOT_BLANK)
@@ -34,8 +36,8 @@ public class User extends BaseEntity implements UserDetails {
     @Transient
     private String confirmPassword;
 
-//    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "project", orphanRemoval = true)
-//    private List<Project> projects = new ArrayList<>();
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH, mappedBy = "user", orphanRemoval = true)
+    private List<Project> projects = new ArrayList<>();
 
     public User() {
         super();
@@ -101,5 +103,13 @@ public class User extends BaseEntity implements UserDetails {
 
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
+    }
+
+    public List<Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(List<Project> projects) {
+        this.projects = projects;
     }
 }

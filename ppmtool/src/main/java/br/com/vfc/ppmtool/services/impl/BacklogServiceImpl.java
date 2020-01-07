@@ -1,7 +1,6 @@
 package br.com.vfc.ppmtool.services.impl;
 
 import br.com.vfc.ppmtool.domain.Backlog;
-import br.com.vfc.ppmtool.domain.Project;
 import br.com.vfc.ppmtool.exceptions.ResourceNotFoundException;
 import br.com.vfc.ppmtool.repositories.BacklogRepository;
 import br.com.vfc.ppmtool.services.BacklogService;

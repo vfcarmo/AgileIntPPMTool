@@ -15,6 +15,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -52,10 +53,10 @@ public class ProjectController extends BaseController {
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createNewProject(@Valid @RequestBody Project request,
+    public ResponseEntity<?> createNewProject(@Valid @RequestBody Project request, Principal principal,
                                               UriComponentsBuilder builder) {
 
-        Project savedProject = projectService.save(request);
+        Project savedProject = projectService.save(request, principal.getName());
         URI uri = createURI("/api/project/{projectIdentifier}",
                 savedProject.getProjectIdentifier(), builder);
 
@@ -64,11 +65,11 @@ public class ProjectController extends BaseController {
 
     @PutMapping(value = "/{projectIdentifier}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateProject(@PathVariable String projectIdentifier,
-                                           @Valid @RequestBody ProjectUpdateRequest request) {
+                                           @Valid @RequestBody ProjectUpdateRequest request, Principal principal) {
         Project savedProject = projectService.findByProjectIdentifier(projectIdentifier);
         BeanUtils.copyProperties(request, savedProject);
 
-        Project updatedProject = projectService.save(savedProject);
+        Project updatedProject = projectService.save(savedProject, principal.getName());
 
         return ResponseEntity.ok(updatedProject);
     }
